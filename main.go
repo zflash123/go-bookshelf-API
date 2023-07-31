@@ -3,20 +3,14 @@ package main
 import (
 	"fmt"
 	"log"
-	"net/http"
 	"database/sql"
 	_ "github.com/lib/pq"
-	"github.com/gorilla/mux"
 	"github.com/spf13/viper"
+	"go-bookshelf/routes"
 )
 
 func runServer() {
-	r := mux.NewRouter()
-
-	err := http.ListenAndServe(":8080", r)
-	if err != nil {
-		log.Fatalln("There is an error with the server", err)
-	}
+	routes.Routes()
 }
 func viperEnvConfig() {
 	viper.SetConfigFile(".env")
