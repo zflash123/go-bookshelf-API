@@ -18,9 +18,11 @@ func Hello(w http.ResponseWriter, r *http.Request) {
 func Register(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
+	r.ParseForm()
+
 	var user = []models.User{
-		{Name: "Zaed", Email:"z4ed.thalib123@gmail.com", Password:"zoroIsHere"},
+		{Name: r.Form["name"][0], Email:r.Form["email"][0], Password:r.Form["password"][0]},
 	}
-	user_id := models.Db.Create(&user[0])
-	fmt.Fprintf(w, "User with ID: %v", user_id)
+	models.Db.Create(&user[0])
+	fmt.Fprintf(w, "{'name': %v}", r.Form["name"][0])
 }
