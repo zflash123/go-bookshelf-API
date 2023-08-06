@@ -12,13 +12,13 @@ type User struct {
 type Book struct {
 	gorm.Model
 	Name		string
-	Year		string
+	Year		int
 	Author		string
 	Summary		string
 	Publisher	string
-	PageCount	string
-	ReadPage	string
-	Reading		string
+	PageCount	int
+	ReadPage	int
+	Reading		int
 }
 
 var Db *gorm.DB

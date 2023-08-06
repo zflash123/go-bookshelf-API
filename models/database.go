@@ -35,6 +35,7 @@ func Db_connection() {
 	}
 
 	var errMigration = Db.AutoMigrate(&(User{}))
+	errMigration = Db.AutoMigrate(&(Book{}))
 
 	if errMigration != nil {
 		log.Fatalln(errMigration)
