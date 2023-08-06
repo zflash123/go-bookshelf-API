@@ -34,16 +34,9 @@ func Db_connection() {
 		panic("failed to connect database")
 	}
 
-	sqlDB, err := Db.DB()
-	if err != nil {
-		panic("failed to connect database")
-	}
-	// Close
-	defer sqlDB.Close()
-
 	var errMigration = Db.AutoMigrate(&(User{}))
 
-	if err != nil {
+	if errMigration != nil {
 		log.Fatalln(errMigration)
 	}
 }
