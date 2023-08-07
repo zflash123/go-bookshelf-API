@@ -9,7 +9,6 @@ import (
 
 func AddBook(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	w.WriteHeader(http.StatusCreated)
 	r.ParseForm()
 
 	type RequestData struct {
@@ -31,7 +30,6 @@ func AddBook(w http.ResponseWriter, r *http.Request) {
 		Data    RequestData `json:"data"`
 	}
 	var res Response
-	res.Data = reqData
 
 	json.NewDecoder(r.Body).Decode(&reqData)
 
@@ -49,13 +47,17 @@ func AddBook(w http.ResponseWriter, r *http.Request) {
 	err := result.Error
 
 	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
 		fmt.Fprint(w, err)
 		res.Status = "fail"
 		res.Message = "Gagal menambahkan buku"
 	} else {
+		w.WriteHeader(http.StatusCreated)
 		reqData.BookId = int(book.ID)
 		res.Status = "success"
 		res.Message = "Buku berhasil ditambahkan"
+		res.Data = reqData
+
 		json.NewEncoder(w).Encode(res)
 	}
 }
