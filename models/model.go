@@ -18,6 +18,7 @@ type Book struct {
 	Publisher	string
 	PageCount	int
 	ReadPage	int
+	Finished	int
 	Reading		int
 }
 

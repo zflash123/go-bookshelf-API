@@ -1,13 +1,16 @@
 package controllers
 
 import (
-	// "encoding/json"
 	"encoding/json"
 	"go-bookshelf/models"
 	"net/http"
+	"time"
+	"strconv"
+
+	"github.com/gorilla/mux"
 )
 
-func GetAllBook(w http.ResponseWriter, r *http.Request) {
+func GetAllBooks(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	var books [](models.Book)
 	models.Db.Find(&books)
@@ -28,6 +31,61 @@ func GetAllBook(w http.ResponseWriter, r *http.Request) {
 	}
 	var data Data
 	data.Books = bookSliced
+
+	type Response struct {
+		Status  string      	`json:"status"`
+		Data	Data			`json:"data"`
+	}
+	
+	var res Response
+	
+	res.Status = "success"
+	res.Data = data
+	json.NewEncoder(w).Encode(res)
+}
+
+func GetBookById(w http.ResponseWriter, r *http.Request) {
+	uri_param := mux.Vars(r)
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	var books models.Book
+	models.Db.Find(&books, uri_param["id"])
+	
+	type CustomTime struct {
+		time.Time
+	}
+	type Book struct {
+		Id			int		`json:"id"`
+		Name		string		`json:"name"`
+		Year		int			`json:"year"`
+		Author		string		`json:"author"`
+		Summary		string		`json:"summary"`
+		Publisher	string		`json:"publisher"`
+		PageCount	int			`json:"pageCount"`
+		ReadPage	int			`json:"readPage"`
+		Finished	int			`json:"finished"`
+		Reading		int			`json:"reading"`
+		InsertedAt	CustomTime		`json:"insertedAt"`
+		UpdatedAt	CustomTime		`json:"updatedAt"`
+	}
+
+	type Data struct {
+		Book    Book	`json:"book"`
+	}
+	var book Book
+	uri_param_int, err := strconv.Atoi(uri_param["id"])
+	if(err==nil){
+		book.Id = uri_param_int
+	}
+	var data Data
+	book.Name = books.Name
+	book.Year = books.Year
+	book.Author = books.Author
+	book.Summary = books.Summary
+	book.Publisher = books.Publisher
+	book.PageCount = books.PageCount
+	book.ReadPage = books.ReadPage
+	book.Finished = books.Finished
+	data.Book = book
 
 	type Response struct {
 		Status  string      	`json:"status"`
