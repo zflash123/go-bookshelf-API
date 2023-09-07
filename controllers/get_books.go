@@ -54,16 +54,16 @@ func GetBookById(w http.ResponseWriter, r *http.Request) {
 		time.Time
 	}
 	type Book struct {
-		Id			int		`json:"id"`
-		Name		string		`json:"name"`
-		Year		int			`json:"year"`
-		Author		string		`json:"author"`
-		Summary		string		`json:"summary"`
-		Publisher	string		`json:"publisher"`
-		PageCount	int			`json:"pageCount"`
-		ReadPage	int			`json:"readPage"`
-		Finished	int			`json:"finished"`
-		Reading		int			`json:"reading"`
+		Id			int				`json:"id"`
+		Name		string			`json:"name"`
+		Year		int				`json:"year"`
+		Author		string			`json:"author"`
+		Summary		string			`json:"summary"`
+		Publisher	string			`json:"publisher"`
+		PageCount	int				`json:"pageCount"`
+		ReadPage	int				`json:"readPage"`
+		Finished	bool			`json:"finished"`
+		Reading		bool			`json:"reading"`
 		InsertedAt	CustomTime		`json:"insertedAt"`
 		UpdatedAt	CustomTime		`json:"updatedAt"`
 	}

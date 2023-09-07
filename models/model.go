@@ -18,8 +18,8 @@ type Book struct {
 	Publisher	string
 	PageCount	int
 	ReadPage	int
-	Finished	int
-	Reading		int
+	Finished	bool
+	Reading		bool
 }
 
 var Db *gorm.DB

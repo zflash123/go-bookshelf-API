@@ -20,7 +20,7 @@ func AddBook(w http.ResponseWriter, r *http.Request) {
 		Publisher string `json:"publisher"`
 		PageCount int    `json:"pageCount"`
 		ReadPage  int    `json:"readPage"`
-		Reading   int    `json:"reading"`
+		Reading   bool    `json:"reading"`
 	}
 
 	var reqData RequestData
