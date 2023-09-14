@@ -21,6 +21,7 @@ func Routes() {
 	r.HandleFunc("/books/{id}", controllers.GetBookById).Methods("GET")
 	r.HandleFunc("/books", controllers.AddBook).Methods("POST")
 	r.HandleFunc("/books/{id}", controllers.UpdateBookById).Methods("PUT")
+	r.HandleFunc("/books/{id}", controllers.DeleteBookById).Methods("DELETE")
 	
 	handler := cors.Default().Handler(r)
 	log.Fatal(http.ListenAndServe(":8080", handler))
