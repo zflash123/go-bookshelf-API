@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"go-bookshelf/models"
 	"net/http"
-	"time"
 	"strconv"
+	"time"
 
 	"github.com/gorilla/mux"
 )
@@ -67,16 +67,33 @@ func GetBookById(w http.ResponseWriter, r *http.Request) {
 		InsertedAt	CustomTime		`json:"insertedAt"`
 		UpdatedAt	CustomTime		`json:"updatedAt"`
 	}
+	var book Book
 
 	type Data struct {
 		Book    Book	`json:"book"`
 	}
-	var book Book
-	uri_param_int, err := strconv.Atoi(uri_param["id"])
-	if(err==nil){
-		book.Id = uri_param_int
+
+	type Response struct {
+		Status  string      	`json:"status"`
+		Data	Data			`json:"data"`
 	}
+	
+	var res Response
+
+	uri_param_int, err := strconv.Atoi(uri_param["id"])
+	if(err!=nil){
+		w.WriteHeader(http.StatusNotFound)
+	}
+	book.Id = uri_param_int
 	var data Data
+
+	if(books.ID==0){
+		w.WriteHeader(http.StatusNotFound)
+		res.Status = "failed"
+		res.Data = data
+		json.NewEncoder(w).Encode(res)
+	}
+
 	book.Name = books.Name
 	book.Year = books.Year
 	book.Author = books.Author
@@ -86,13 +103,6 @@ func GetBookById(w http.ResponseWriter, r *http.Request) {
 	book.ReadPage = books.ReadPage
 	book.Finished = books.Finished
 	data.Book = book
-
-	type Response struct {
-		Status  string      	`json:"status"`
-		Data	Data			`json:"data"`
-	}
-	
-	var res Response
 	
 	res.Status = "success"
 	res.Data = data
