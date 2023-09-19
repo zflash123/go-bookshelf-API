@@ -21,11 +21,13 @@ func DeleteBookById(w http.ResponseWriter, r *http.Request) {
 	}
 	var res Response
 	if(err!=nil){
+		w.WriteHeader(http.StatusBadGateway)
 		res.Status = "failed"
+	} else {
+		models.Db.Delete(&books, uri_param_id)
+		w.WriteHeader(http.StatusOK)
+		res.Status = "success"
+		res.Message = "Buku berhasil dihapus"
 	}
-	models.Db.Delete(&books, uri_param_id)
-	res.Status = "success"
-	res.Message = "Buku berhasil dihapus"
-
 	json.NewEncoder(w).Encode(res)
 }
