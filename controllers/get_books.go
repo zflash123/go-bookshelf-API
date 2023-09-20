@@ -13,6 +13,14 @@ import (
 func GetAllBooks(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	var books [](models.Book)
+	reading:= r.URL.Query().Get("reading")
+	//Convert string to int
+	reading_int, err := strconv.Atoi(reading)
+	if(err==nil && reading_int==1){
+		models.Db.Where("reading = ?", "true").First(&books)
+	} else if(err==nil && reading_int==0){
+		models.Db.Where("reading = ?", "false").First(&books)
+	}
 	models.Db.Find(&books)
 	type BookSliced struct {
 		Id			int			`json:"id"`
