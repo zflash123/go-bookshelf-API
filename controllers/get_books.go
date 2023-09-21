@@ -17,11 +17,13 @@ func GetAllBooks(w http.ResponseWriter, r *http.Request) {
 	//Convert string to int
 	reading_int, err := strconv.Atoi(reading)
 	if(err==nil && reading_int==1){
-		models.Db.Where("reading = ?", "true").First(&books)
+		models.Db.Where("reading = ?", "true").Find(&books)
 	} else if(err==nil && reading_int==0){
-		models.Db.Where("reading = ?", "false").First(&books)
-	}
-	models.Db.Find(&books)
+		models.Db.Where("reading = ?", "false").Find(&books)
+	} else{
+		models.Db.Find(&books)
+	} 
+	
 	type BookSliced struct {
 		Id			int			`json:"id"`
 		Name		string		`json:"name"`
@@ -99,20 +101,19 @@ func GetBookById(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusNotFound)
 		res.Status = "failed"
 		res.Data = data
-		json.NewEncoder(w).Encode(res)
+	} else{
+		book.Name = books.Name
+		book.Year = books.Year
+		book.Author = books.Author
+		book.Summary = books.Summary
+		book.Publisher = books.Publisher
+		book.PageCount = books.PageCount
+		book.ReadPage = books.ReadPage
+		book.Finished = books.Finished
+		data.Book = book
+		
+		res.Status = "success"
+		res.Data = data
 	}
-
-	book.Name = books.Name
-	book.Year = books.Year
-	book.Author = books.Author
-	book.Summary = books.Summary
-	book.Publisher = books.Publisher
-	book.PageCount = books.PageCount
-	book.ReadPage = books.ReadPage
-	book.Finished = books.Finished
-	data.Book = book
-	
-	res.Status = "success"
-	res.Data = data
 	json.NewEncoder(w).Encode(res)
 }
