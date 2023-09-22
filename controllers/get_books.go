@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"go-bookshelf/models"
 	"net/http"
 	"strconv"
@@ -16,10 +17,18 @@ func GetAllBooks(w http.ResponseWriter, r *http.Request) {
 	reading:= r.URL.Query().Get("reading")
 	//Convert string to int
 	reading_int, err := strconv.Atoi(reading)
-	if(err==nil && reading_int==1){
+	finished:= r.URL.Query().Get("finished")
+	//Convert string to int
+	finished_int, err := strconv.Atoi(finished)
+	if(err==nil){}
+	if(reading_int==1){
 		models.Db.Where("reading = ?", "true").Find(&books)
-	} else if(err==nil && reading_int==0){
+	} else if(reading_int==0){
 		models.Db.Where("reading = ?", "false").Find(&books)
+	} else if(finished_int==1){
+		models.Db.Where("finished = ?", "true").Find(&books)
+	} else if(finished_int==0){
+		models.Db.Where("finished = ?", "false").Find(&books)
 	} else{
 		models.Db.Find(&books)
 	} 
