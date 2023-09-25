@@ -33,6 +33,10 @@ func AddBook(w http.ResponseWriter, r *http.Request) {
 
 	json.NewDecoder(r.Body).Decode(&reqData)
 
+	finishedBook:= false
+	if(reqData.ReadPage==reqData.PageCount){
+		finishedBook = true
+	}
 	var book = models.Book{
 		Name:      reqData.Name,
 		Year:      reqData.Year,
@@ -42,6 +46,7 @@ func AddBook(w http.ResponseWriter, r *http.Request) {
 		PageCount: reqData.PageCount,
 		ReadPage:  reqData.ReadPage,
 		Reading:   reqData.Reading,
+		Finished: finishedBook,
 	}
 	result := models.Db.Create(&book)
 	err := result.Error
