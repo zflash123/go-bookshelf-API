@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
+	// "fmt"
 	"go-bookshelf/models"
 	"net/http"
 	"strconv"
@@ -38,15 +38,16 @@ func GetAllBooks(w http.ResponseWriter, r *http.Request) {
 		Name		string		`json:"name"`
 		Publisher	string		`json:"publisher"`
 	}
-	var bookSliced [2]BookSliced
-	for i := 0; i < len(bookSliced); i++ {
+	var bookArray [10]BookSliced
+	var bookSliced = bookArray[0:len(books)]
+	for i := 0; i < len(books); i++ {
 		bookSliced[i].Id = int(books[i].ID)
 		bookSliced[i].Name = books[i].Name
 		bookSliced[i].Publisher = books[i].Publisher
 	}
 
 	type Data struct {
-		Books    [2]BookSliced	`json:"books"`
+		Books    []BookSliced	`json:"books"`
 	}
 	var data Data
 	data.Books = bookSliced
