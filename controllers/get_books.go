@@ -34,7 +34,7 @@ func GetAllBooks(w http.ResponseWriter, r *http.Request) {
 		Name		string		`json:"name"`
 		Publisher	string		`json:"publisher"`
 	}
-	var bookArray [10]BookSliced
+	var bookArray [30]BookSliced
 	var bookSliced = bookArray[0:len(books)]
 	for i := 0; i < len(books); i++ {
 		bookSliced[i].Id = int(books[i].ID)
