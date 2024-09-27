@@ -33,7 +33,6 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	var users []models.User
 	userData := models.Db.Where("email = ?", r.Form["email"][0]).First(&users)
-	fmt.Printf("user name %v", users[0].Name)
 	emailCheckErr := userData.Error
 	pwdCheckErr := models.Db.Where("password = ?", r.Form["password"][0]).First(&users).Error
 	type Response struct {
