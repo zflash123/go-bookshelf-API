@@ -31,16 +31,21 @@ func Register(w http.ResponseWriter, r *http.Request) {
 
 func Login(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
-	var user []models.User
-	emailCheckErr := models.Db.Where("email = ?", r.Form["email"][0]).First(&user).Error
-	pwdCheckErr := models.Db.Where("password = ?", r.Form["password"][0]).First(&user).Error
-
+	var users []models.User
+	userData := models.Db.Where("email = ?", r.Form["email"][0]).First(&users)
+	fmt.Printf("user name %v", users[0].Name)
+	emailCheckErr := userData.Error
+	pwdCheckErr := models.Db.Where("password = ?", r.Form["password"][0]).First(&users).Error
 	type Response struct {
 		Message string `json:"message"`
+		Auth string `json:"auth_token"`
 	}
 	if emailCheckErr == nil && pwdCheckErr == nil {
 		var res Response
 		res.Message = "Your account successfully logged in"
+		var strJwt string
+		strJwt = CreateJwt(users[0].Email, users[0].Name)
+		res.Auth = strJwt
 
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
