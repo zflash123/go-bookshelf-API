@@ -6,16 +6,7 @@ import (
 	"go-bookshelf/models"
 	"log"
 	"net/http"
-
-	"github.com/gorilla/mux"
 )
-
-func Hello(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	w.WriteHeader(http.StatusOK)
-	w.Header().Set("Content-Type", "text/html")
-	fmt.Fprintf(w, "<h1>Hello %v</h1>", vars["name"])
-}
 
 func Register(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
