@@ -40,6 +40,15 @@ func VerifyJwtToken(next http.Handler) http.Handler {
 			}
 			return
 		}
+		if(len(strings.Split(auth, " "))!=2)||(strings.Split(auth, " ")[0]!="Bearer"){
+			w.WriteHeader(http.StatusUnauthorized)
+			res.Message = "Please follow 'Bearer yourJwtToken' format"
+			err := json.NewEncoder(w).Encode(res)
+			if(err!=nil){
+				fmt.Println(err)
+			}
+			return
+		}
 		jwtToken := strings.Split(auth, " ")[1]
 		token, err := jwt.Parse(jwtToken, func(token *jwt.Token) (interface{}, error) {
 			strKey := fmt.Sprintf("%v", viper.Get("JWT_KEY"))
@@ -48,16 +57,19 @@ func VerifyJwtToken(next http.Handler) http.Handler {
 		})
 
 		if err != nil {
-			log.Fatalln(err)
-		}
-
-		if !token.Valid {
 			w.WriteHeader(http.StatusUnauthorized)
-			res.Message = "Your token is invalid"
-			err := json.NewEncoder(w).Encode(res)
-			if err != nil {
-				log.Fatalln(err)
+			if !token.Valid {
+				res.Message = "Your token is invalid"
+				err := json.NewEncoder(w).Encode(res)
+				if err != nil {
+					fmt.Println(err)
+				}
+				return
 			}
+			res.Message = "There is error when parsing jwt token"
+			err := json.NewEncoder(w).Encode(res)
+			fmt.Println(err)
+			return
 		}
 
 		next.ServeHTTP(w, r)
