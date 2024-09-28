@@ -30,6 +30,7 @@ func VerifyJwtToken(next http.Handler) http.Handler {
 		var res Response
 
 		auth := r.Header.Get("Authorization")
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		if(auth==""){
 			w.WriteHeader(http.StatusUnauthorized)
 			res.Message = "Authorization header is empty"
